@@ -13,7 +13,7 @@ describe("the route handlers", () => {
     });
     it("responds with json", async () => {
       const response = await request(server).get("/");
-      expect(response.body).toMatch(/json/i);
+      expect(response.type).toMatch(/json/i);
     });
     it("sends correct object", async () => {
       const response = await request(server).get("/");
@@ -22,15 +22,15 @@ describe("the route handlers", () => {
   });
   describe("get /pets", () => {
     it("responds with 200", async () => {
-      const response = await request(server).get("/");
+      const response = await request(server).get("/pets");
       expect(response.status).toBe(200);
     });
     it("responds with json", async () => {
-      const response = await request(server).get("/");
-      expect(response.body).toMatch(/json/i);
+      const response = await request(server).get("/pets");
+      expect(response.type).toMatch(/json/i);
     });
     it("sends correct object", async () => {
-      const response = await request(server).get("/");
+      const response = await request(server).get("/pets");
       expect(response.body).toEqual([]);
     });
   });

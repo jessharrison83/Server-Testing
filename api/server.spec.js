@@ -2,9 +2,24 @@ const request = require("supertest");
 const db = require("../data/dbConfig");
 const server = require("./server.js");
 
+const seeds = [
+  { id: 1, name: "Nova", type: "dog" },
+  { id: 2, name: "Reginald", type: "alpaca" },
+  { id: 3, name: "Pancake", type: "cat" },
+  { id: 4, name: "Angus", type: "dog" }
+];
+
 describe("the route handlers", () => {
+  beforeEach(() => {
+    return db.migrate.rollback().then(() => {
+      return db.migrate.latest().then(() => {
+        return db.seed.run();
+      });
+    });
+  });
+
   afterEach(async () => {
-    await db("pets").truncate();
+    await db.migrate.rollback();
   });
   describe("get /", () => {
     it("responds with 200", async () => {
@@ -31,7 +46,7 @@ describe("the route handlers", () => {
     });
     it("sends correct object", async () => {
       const response = await request(server).get("/pets");
-      expect(response.body).toEqual([]);
+      expect(response.body).toEqual(seeds);
     });
   });
   describe("post /pets", () => {
